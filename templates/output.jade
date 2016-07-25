@@ -1,0 +1,127 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title Nighwatch.js Testing Summary
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css')
+    script(type='text/javascript', src='https://www.google.com/jsapi')
+    script(type='text/javascript').
+      google.load('visualization', '1', {packages:['corechart']});
+      google.setOnLoadCallback(drawSummaryChart);
+      function drawSummaryChart() {
+        var dataTable = [
+              ['Result', 'Number of Tests'],
+              ['Success', #{numSuccess}],
+              ['Failure', #{numFailures}],
+            ],
+            data = google.visualization.arrayToDataTable(dataTable);
+        var options = {
+          'chartArea': {'width': '90%', 'height': '90%'},
+          'legend': 'none',
+          'is3D': true,
+          colors: ['#d6e9c6', '#ebccd1', '#faebcc']
+        };
+        var chart = new google.visualization.PieChart(document.getElementById('summaryPieChart'));
+        google.visualization.events.addListener(chart, 'select', function() {
+            var selection = chart.getSelection()[0];
+            if(!selection) {
+                $('table.results tbody tr').hide().filter('[data-status]').show();
+                return;
+            }
+
+            var row = selection.row || 0;
+            var selected = dataTable[row+1][0];
+            $('table.results tbody tr').hide().filter('[data-status="'+selected+'"]').show();
+        });
+        chart.draw(data, options);
+      }
+
+    style.
+        tr.danger {
+            cursor: pointer;
+        }
+        pre{
+            overflow-x:auto;
+            max-width:900px;
+            margin-right:auto;
+            margin-left:auto;
+        }
+
+  body
+    div.jumbotron
+      div.container
+        h1 Nightwatch.js Testing Summary
+        p
+            | This report summarizes a series of automated Nightwatch.js test suites.  This report was generated
+            span= summaryReportGenDateTime
+            | .
+
+    div.container
+      div.row(style='text-align: center;')
+        div#summaryPieChart(style='width: 250px; height: 250px; display: inline-block; margin-left: auto; margin-right: auto;')
+
+    div.container
+      div.row
+        div.col-md-4
+          h2 Test Suites
+          p
+            | A total of
+            span= numTests
+            |  test suites were executed.
+        div.col-md-4
+          h2 Success
+          p
+            span= numSuccess
+            |  of those test suites were successful.
+        div.col-md-4
+          h2 Failures
+          p
+            span= numFailures
+            |  of those test suites failed.
+
+    div.container(style='margin-top: 20px;')
+        div.page-header
+            h1 Test Suites
+
+        table.table.results
+            thead
+                tr
+                    th Test Suite Name
+                    th Test Case Name
+                    th Saucelabs Link
+                    th Assertions
+                    th Assertions Failed
+                    th Assertions Skipped
+                    th Run Time
+            tbody
+                - each suite, suiteNum in suites
+                    - each testcase, caseNum in suite.cases
+                        tr(class=(testcase.numFailures < 1 && testcase.numSkipped < 1) ? '' : 'danger', data-case-number=suiteNum+'-'+caseNum, data-status=(testcase.numFailures < 1 && testcase.numSkipped < 1) ? 'Success' : 'Failure')
+                            td #{suite.name}
+                            td #{testcase.name}
+                            td
+                                if testcase.link
+                                    a(href=testcase.link) #{testcase.link}
+                                else
+                                    | [No link available]
+                            td #{testcase.numAssertions}
+                            td #{testcase.numFailures}
+                            td #{testcase.numSkipped}
+                            td #{testcase.executionTime}
+                        if testcase.failures.length > 0
+                            each failure in testcase.failures
+                                tr.stacktrace(data-case-number=suiteNum+'-'+caseNum, style="display:none;")
+                                    td(colspan=7)
+                                        pre #{failure.message && failure.message.message && failure.message.message.length > 0 ? failure.message.message : "No failure message was provided."}
+                                        pre #{failure.details}
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js')
+    script.
+        $(function() {
+            $('tr.danger').click(function() {
+                var caseNum = $(this).data('case-number');
+                $('tbody tr.stacktrace[data-case-number='+caseNum+']').toggle();
+            });
+        })

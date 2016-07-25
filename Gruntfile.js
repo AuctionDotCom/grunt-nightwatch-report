@@ -20,7 +20,8 @@ module.exports = function(grunt) {
     nightwatch_report: {
       files: ['test/reports/**/*.xml'],
       options: {
-        outputDir: 'test/reports/summary'
+        outputDir: 'test/reports/summary',
+        includeTimestamp: true
       }
     }
 
