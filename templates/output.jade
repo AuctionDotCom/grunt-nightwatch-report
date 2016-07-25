@@ -103,7 +103,7 @@ html(lang='en')
                             td #{testcase.name}
                             td
                                 if testcase.link
-                                    a(href=testcase.link) #{testcase.link}
+                                    a(href=testcase.link, target="_blank") #{testcase.link}
                                 else
                                     | [No link available]
                             td #{testcase.numAssertions}
