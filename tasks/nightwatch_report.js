@@ -200,6 +200,25 @@ module.exports = function(grunt) {
             });
         });
 
+        summary.numTestcases = (summary.suites || [])
+            .reduce(function(count, suite) {
+                return count + suite.numTests;
+            }, 0)
+        summary.numSuccessTestcases = (summary.suites || [])
+            .reduce(function(count, suite) {
+                var numFailures = suite.cases
+                    .reduce(function(count, testcase) { return count + testcase.numFailures; }, 0);
+
+                return count + (suite.numTests - numFailures);
+            }, 0);
+        summary.numErrorTestcases = (summary.suites || [])
+            .reduce(function(count, suite) {
+                var numFailures = suite.cases
+                    .reduce(function(count, testcase) { return count + testcase.numFailures; }, 0);
+
+                return count + numFailures;
+            }, 0);
+
         var summaryJsonString = JSON.stringify(summary, null, 4);
 
         //Create a timestamp directory to generate reports to

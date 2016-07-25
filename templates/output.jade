@@ -65,21 +65,20 @@ html(lang='en')
     div.container
       div.row
         div.col-md-4
-          h2 Test Suites
-          p
-            | A total of
-            span= numTests
-            |  test suites were executed.
+          h2 Test Cases
+          p #{"A total of "}
+            span= numTestcases
+            |  test cases were executed.
         div.col-md-4
           h2 Success
           p
-            span= numSuccess
-            |  of those test suites were successful.
+            span= numSuccessTestcases
+            |  of those test cases were successful.
         div.col-md-4
           h2 Failures
           p
-            span= numFailures
-            |  of those test suites failed.
+            span= numErrorTestcases
+            |  of those test cases failed.
 
     div.container(style='margin-top: 20px;')
         div.page-header
