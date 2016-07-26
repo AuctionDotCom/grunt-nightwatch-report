@@ -2,24 +2,16 @@
   "name": "grunt-nightwatch-report",
   "description": "Aggregate and process Nightwatch.js test suite reports to create easy to digest HTML reports.",
   "version": "0.1.6",
-  "homepage": "https://github.com/jdonenine/grunt-nightwatch-report",
+  "homepage": "https://github.com/AuctionDotCom/grunt-nightwatch-report",
   "author": {
-    "name": "Jeff DiNoto",
-    "email": "jeff.dinoto@gmail.com"
+    "name": "Nathan Broslawsky",
+    "email": "nbroslawsky@ten-x.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jdonenine/grunt-nightwatch-report.git"
+    "url": "git@github.com:AuctionDotCom/grunt-nightwatch-report.git"
   },
-  "bugs": {
-    "url": "https://github.com/jdonenine/grunt-nightwatch-report/issues"
-  },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/jdonenine/grunt-nightwatch-report/blob/master/LICENSE-MIT"
-    }
-  ],
+  "licenses": "UNLICENSED",
   "engines": {
     "node": ">= 0.8.0"
   },
@@ -47,5 +39,8 @@
     "nightwatchjs",
     "grunt",
     "selenium"
-  ]
+  ],
+  "publishConfig": {
+    "registry": "http://registry.prod.auction.local:8081/repository/npm"
+  }
 }
